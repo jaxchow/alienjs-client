@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Application</title>
+  </head>
+  <style media="screen">
+  *, *:before, *:after {
+     -moz-box-sizing: border-box;
+     -webkit-box-sizing: border-box;
+     box-sizing: border-box;
+ }
+
+ html, body {
+     font-size: 16px;
+     line-height: 1.5rem;
+     height: 100%;
+     min-height: 100%;
+ }
+
+ .header {
+     padding: 1rem;
+     background: #111;
+     height: 4rem;
+     color: #fff;
+ }
+
+ .sidebar {
+   padding: 1rem;
+   width: 190px;
+   color: #fff;
+ }
+
+ .content {
+     background: #ECF0F1;
+ }
+ .sidenav-wrapper{
+   position: relative;
+ }
+
+.sidenav > li.sidenav-title {
+    height: 65px;
+}
+.sidenav > li.sidenav-title > a {
+    background: #2d3e63;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidenav {
+    list-style: none;
+    text-indent: 20px;
+    top: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #2b3643;
+}
+
+.sidenav li a  {
+    color: #fff;
+    display: block;
+    float: left;
+    text-decoration: none;
+    width: 190px;
+}
+
+.sidenav .sidenav-title .sidenav-toogle {
+    float: right;
+    font-size: 18px;
+    padding-right: 28px;
+    line-height: 60px;
+}
+
+.sidenav .sidenav-list,.sidenav .sidenav-submenu {
+    height: 40px;
+}
+
+.sidenav .sidenav-list a,.sidenav .sidenav-submenu  a {
+    text-indent: 25px;
+    font-size: 15px;
+    color: #b2bfdc;
+    line-height: 40px;
+}
+
+
+.sidenav .sidenav-list a:hover {
+    color: #fff;
+}
+
+
+.sidenav .sidenav-list a:hover,.sidenav .sidebar-title a {
+    background: #1caf9a;
+}
+
+.sidenav-navgroup > span {
+    color: #FFF;
+}
+
+.sidenav .sidenav-list .sidenav-icon,.sidenav .sidenav-submenu .sidenav-icon {
+    float: right;
+    padding-right: 29px;
+    line-height: 40px;
+    width: 70px;
+}
+
+.sidenav .sidenav-list .sidenav-icon:hover {
+    padding-right:29px;
+}
+
+
+.sidenav .sidenav-list a:hover .sidenav-icon {
+    text-indent: 25px;
+}
+.sidenav-submenu-sidenav {
+    list-style: none;
+    text-indent: 20px;
+    margin:0;
+    padding:0;
+}
+
+.sidenav-submenu-closed > ul.sidenav-submenu-sidenav {
+    display:none;
+}
+
+.sidenav .sidenav-submenu a:hover {
+    color: #FFF;
+}
+
+.sidenav-submenu-sidenav span.sidenav-submenu-item {
+    margin-left: 15px;
+}
+
+.sidenav-selected {
+    background: #1caf9a;
+    color: #FFF !important;
+}
+  </style>
+  <body>
+    <div id="container"></div>
+    <script src="/asserts/app.bundle.js" charset="utf-8"></script>
+  </body>
+</html>
