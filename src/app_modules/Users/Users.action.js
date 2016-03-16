@@ -1,25 +1,18 @@
 import fetch from 'isomorphic-fetch'
-import { routeActions } from 'react-router-redux'
+import {routeActions} from 'react-router-redux'
+import {reduce,initialState} from './Users.reducer'
 
-const URL_DOMAIN='http://localhost:4000'
+const URL_DOMAIN='http://192.168.222.63:4000'
 
 //TODO: 调整命名及常量定义
-export const SAVE_ITEM='SAVE_ITEM'
-export const NEW_ITEM='NEW_ITEM'
-export const EDIT_ITEM='EDIT_ITEM'
-export const REMOVE_ITEM= 'REMOVE_ITEM'
-export const GET_ITEM= 'GET_ITEM'
-
-export const LOAD_ITEM_REQUEST= 'LOAD_ITEM_REQUEST'
-export const LOAD_ITEM_SUCCESS = 'LOAD_ITEM_SUCCESS'
-export const LOAD_ITEM_FAILURE = 'LOAD_ITEM_FAILURE'
-
-export const LIST_ITEM_REQUEST = 'LIST_ITEM_REQUEST'
-export const LIST_ITEM_SUCCESS = 'LIST_ITEM_SUCCESS'
-export const LIST_ITEM_FAILURE = 'LIST_ITEM_FAILURE'
-
-export const SAVE_ITEM_STORES = 'SAVE_ITEM_STORES'
-export const LIST_ITEM = 'LIST_ITEM'
+export const SAVE_ITEM='USER_SAVE_ITEM'
+export const REMOVE_ITEM= 'USER_REMOVE_ITEM'
+export const GET_ITEM= 'USER_GET_ITEM'
+export const LIST_ITEM = 'USER_LIST_ITEM'
+export const SAVE_BATCH= 'USER_SAVE_BATCH'
+export const FETCH_REQUEST = 'USER_FETCH_REQUEST'
+export const FETCH_SUCCESS = 'USER_FETCH_SUCCESS'
+export const FETCH_FAILURE = 'USER_FETCH_FAILURE'
 
 
 function getItem(key){
@@ -36,99 +29,93 @@ function removeItem(key){
   }
 }
 
-function saveItem(item){
+function saveItem(key,item){
   return {
     type: SAVE_ITEM,
+    key,
     item
   }
 }
 
-function editItem(key){
+function saveBatch(items,total){
   return {
-    type: EDIT_ITEM,
-    key
+    type: SAVE_BATCH,
+    items,
+    total
   }
 }
 
-function newItem(key){
-  return {
-    type: NEW_ITEM,
-    key
-  }
-}
 
-function listItem(start,offset){
+function listItem(idx,offset){
   return {
     type: LIST_ITEM,
-    start,
+    idx,
     offset
   }
 }
 
-function listItemRequest(list){
+function fetchFailure(stateCode){
   return {
-    type: LIST_ITEM_REQUEST,
-    list
+    type:FETCH_FAILURE,
+    stateCode
   }
 }
 
-function listItemSuccess(list){
+function fetchRequest(stateCode){
   return {
-    type: LIST_ITEM_SUCCESS,
-    list
+    TYPE:FETCH_REQUEST,
+    stateCode
   }
 }
 
-function listItemFailure(list) {
+function fetchSuccess(stateCode){
   return {
-    type: LIST_ITEM_FAILURE,
-    list
-  };
+    TYPE:FETCH_SUCCESS,
+    stateCode
+  }
 }
 
-function loadItemFailure(key, error) {
-  return {
-    type: LOAD_ITEM_FAILURE,
-    key,
-    error
-  };
-}
-
-function loadItemRequest(key) {
-  return {
-    type: LOAD_ITEM_REQUEST,
-    key
-  };
-}
-
-function saveItemStore(key,entity){
-    return {
-      type:SAVE_ITEM_STORE,
-      key,
-      entity,
+export function listAction(start=1,offset=-1){
+  return (dispatch,getState) =>{
+    let reducer=getState().userReducer
+    if(reducer.total<=(start+offset)){
+      return fetch(`${URL_DOMAIN}/user/`)
+        .then(res => res.json())
+        .then(json => {
+          //TODO : 业务异常未处理
+          dispatch(saveBatch(json.list,json.total))
+        })
+        .then(()=>{
+          dispatch(listItem(start,offset))
+        })
+        .catch(ex => {
+          return dispatch(fetchFailure(ex))
+        })
+    }else{
+      return dispatch(listItem(start,offset))
     }
-}
-
-export function listAction(start,offset){
-  return dispatch =>{
-  //    return dispatch(listItem(start,offset))
-    return fetch(`${URL_DOMAIN}/user/`)
-      .then(res => res.json())
-      .then(json => {
-        return dispatch(listItemSuccess(json.list))
-      })
-      // .then(json => {
-      //   return dispatch(saveItemStore(json.data))
-      // })
-      .catch(ex => {
-        return dispatch(listItemFailure(ex))
-      })
   }
 }
 
 export function loadAction(key){
-  return dispatch =>{
+  return (dispatch,getState) =>{
+    let reducer=getState().userReducer
+    if(!reducer.map.has(key)){
+      return fetch(`${URL_DOMAIN}/user/${key}`)
+        .then(res => res.json())
+        .then(json => {
+          //TODO : 业务异常未处理
+          dispatch(saveItem(json.list[0].id,json.list[0]))
+        })
+        .then(()=>{
+          dispatch(getItem(key))
+        })
+        .catch(ex => {
+          return dispatch(fetchFailure(ex))
+        })
+    }else{
       return dispatch(getItem(key))
+    }
   }
 }
 
@@ -137,7 +124,6 @@ export function saveAction(item){
 //  return dispatch => dispatch(saveItem(item))
   return dispatch => {
     //dispatch(loadItemRequest(key))
-    console.log("saveAction",item)
     return fetch(`${URL_DOMAIN}/user/`,{
         method: 'post',
         body:JSON.stringify(item)

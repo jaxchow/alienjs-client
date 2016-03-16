@@ -8,6 +8,7 @@ import {BooksListContainer,BooksFormContainer} from './Books.container'
       <IndexRoute component={BooksListContainer} />
       <Route path="list" components={BooksListContainer} />
       <Route path="add" components={BooksFormContainer} />
+      <Route path="edit/:id" components={BooksFormContainer} />
     </Router>
 )
 

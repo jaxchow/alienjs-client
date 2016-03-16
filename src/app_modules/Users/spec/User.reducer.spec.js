@@ -1,153 +1,75 @@
 import {expect} from 'chai'
 
 import {SAVE_ITEM,REMOVE_ITEM,GET_ITEM,SAVE_ITEM_STORES} from '../Users.action'
-import userReducer,{reduce} from '../Users.reducer'
+import userReducer,{reduce,initialState} from '../Users.reducer'
 
 describe('users reducer test', () => {
-
-  it('should return the SAVE_ITEM',() =>{
-    var initialState={
-      stores:{},
-      total:0,
-      list:[],
-      params:{},
-      isFetching:false,
-      updateAt:""
-    }
-    var expectedReduce={
-      stores:{},
-      total:0,
-      list:['12'],
-      params:{},
-      isFetching:false,
-      updateAt:""
-    }
-    expect(reduce(initialState,{
-      type:SAVE_ITEM,
-      key:'12'
-     })).to.eql(expectedReduce)
+  it('should be undefined',()=>{
+    expect(reduce(initialState,{type:undefined}))
+    .to.eql(initialState)
   })
 
-  it('should return the REMOVE_ITEM key is 13',() =>{
-    var initialState={
-      stores:{},
-      total:0,
-      list:['12','13','14'],
-      params:{},
-      isFetching:false,
-      updateAt:""
+  it('should be SAVE_ITEM key {1}',()=>{
+    let key=1
+    let item={
+      id:key,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
     }
-    var expectedReduce={
-      stores:{},
-      total:0,
-      list:['12','14'],
-      params:{},
-      isFetching:false,
-      updateAt:""
-    }
-    expect(reduce(initialState,{
-      type:REMOVE_ITEM,
-      key:'13'
-     })).to.eql(expectedReduce)
+
+    let expectedReduce=Object.assign(initialState,{
+        map:new Map().set(key,item)
+    })
+    let reducer=reduce(initialState,{type:'SAVE_ITEM',key,item})
+    expect(reducer.map.get(key))
+    .to.eql(item)
   })
 
-  it('should be action SAVE_ITEM_STORES',()=>{
-    var expectedReduce={
-      stores:{
-        '13':{ id:'13', username:'jaxchow' }
-      },
-      total:0,
-      list:['13'],
-      params:{},
-      isFetching:false,
-      updateAt:""
+  it('should be GET_ITEM key {1}',()=>{
+    let item={
+      id:1,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
     }
-    expect(reduce(undefined,{
-      type:'SAVE_ITEM_STORES',
-      key:'13',
-      item:{id:'13',username:'jaxchow'}
-     })).to.eql(expectedReduce)
+    expect(reduce(initialState,{type:'GET_ITEM',key:1}).list)
+    .to.eql([item])
   })
 
-  it('should be LOAD_ITEM_SUCCESS',()=>{
-    var expectedReduce={
-      stores:{
-        '13':{ id:'13', username:'jaxchow' }
-      },
-      total:0,
-      list:['13'],
-      params:{},
-      isFetching:false,
-      updateAt:""
+  it('should be REMOVE_ITEM KEY {1}',()=>{
+    let item={
+      id:1,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
     }
-    expect(reduce(undefined,{
-      type:'LOAD_ITEM_SUCCESS',
-      key:'13',
-      item:{id:'13',username:'jaxchow'}
-     })).to.eql(expectedReduce)
+    let reducer=reduce(initialState,{type:'REMOVE_ITEM',key:1})
+    expect(reducer.map.has(1))
+    .to.eql(false)
   })
 
-  it('should be GET_ITEM KEY{3}',()=>{
-    var initialState={
-      stores:{
-        '1':{ id:'1', username:'jaxchow' },
-        '2':{ id:'2', username:'mr.j' },
-        '3':{ id:'3', username:'jax' },
-        '4':{ id:'4', username:'xdixon' }
-      },
-      total:0,
-      list:['1','2','3','4'],
-      params:{},
-      isFetching:false,
-      updateAt:""
+  it('should be LIST_ITEM',()=>{
+    let item={
+      id:1,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
     }
-    var expectedReduce={
-      stores:{
-        '3':{ id:'3', username:'jax' },
-      },
-      total:0,
-      list:['3'],
-      params:{},
-      isFetching:false,
-      updateAt:""
-    }
-    expect(reduce(initialState,{
-      type:'GET_ITEM',
-      key:'3'
-    })).to.eql(expectedReduce)
+    initialState.map.set(1,item)
+    initialState.map.set(2,item)
+    initialState.map.set(3,item)
+    initialState.map.set(4,item)
+    initialState.map.set(5,item)
+    initialState.map.set(6,item)
+    initialState.map.set(7,item)
+
+    let reducer=reduce(initialState,{type:'LIST_ITEM'})
+    expect(reducer.list.length)
+    .to.eql(initialState.map.size)
   })
 
-  it('should be LIST_ITEM {0,3} size {3}',()=>{
-    var initialState={
-      stores:{
-        '1':{ id:'1', username:'jaxchow' },
-        '2':{ id:'2', username:'mr.j' },
-        '3':{ id:'3', username:'jax' },
-        '4':{ id:'4', username:'xdixon' }
-      },
-      total:0,
-      list:['1','2','3','4'],
-      params:{},
-      isFetching:false,
-      updateAt:""
-    }
-    var expectedReduce={
-      stores:{
-        '1':{ id:'1', username:'jaxchow' },
-        '2':{ id:'2', username:'mr.j' },
-        '3':{ id:'3', username:'jax' },
-        '4':{ id:'4', username:'xdixon' }
-      },
-      total:0,
-      list:['1','2','3'],
-      params:{},
-      isFetching:false,
-      updateAt:""
-    }
-    expect(reduce(initialState,{
-      type:'LIST_ITEM',
-      start:0,
-      offset:3
-    })).to.eql(expectedReduce)
+  it('should be LIST_ITEM start {1} offset {5} ',()=>{
+      let idx=1
+      let offset=5
+      let reducer=reduce(initialState,{type:'LIST_ITEM',idx:idx,offset:offset})
+      expect(reducer.list.length)
+      .to.eql(offset)
   })
 })

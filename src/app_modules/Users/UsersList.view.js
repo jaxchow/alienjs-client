@@ -16,13 +16,13 @@ class SeachListForm extends Component{
     submitting: PropTypes.bool.isRequired
   };
   render(){
-    const {handleSubmit,fields} = this.props;
+    const {handleSubmit,fields,liveChange} = this.props;
     return(
       <Navbar.Form pullRight>
-      <form onSubmit={handleSubmit} className="form-inline">
-        <Input type="text" label="用户名" placeholder="plase search username" {...fields.username}/>
+      <form onSubmit={handleSubmit} className="form-inline" >
+        <Input type="text" label="用户名" placeholder="plase search username" {...fields.username} />
         {' '}
-        <Input type="text" label="邮箱" placeholder="plase search email" {...fields.email}/>
+        <Input type="text" label="邮箱" placeholder="plase search email" {...fields.email} />
         {' '}
         <Button type="submit">搜索</Button>
       </form>
@@ -56,7 +56,7 @@ class UsersListView extends Component{
      <Column
        columnKey="id"
        header={ <Cell> 编号 </Cell> }
-       cell={<LinkCell data={sortedDataList} col="id" />}
+       cell={<TextCell data={sortedDataList} col="id" />}
        width={100}
      />
      <Column
@@ -74,7 +74,8 @@ class UsersListView extends Component{
      <Column
        columnKey="email"
        header={ <Cell> 操作 </Cell> }
-       cell={<LinkCell data={sortedDataList} col="id"/>}
+       cell={<LinkCell path={"#/users/edit/"} data={sortedDataList} col="id"/>}
+
        width={200}
      />
      </Table>
@@ -94,7 +95,11 @@ class UsersListView extends Component{
     )
   }
   handleSubmit(values){
-    
+    let {actions}=this.props
+    actions.listAction(values)
+  }
+  handleChange(values){
+    console.log(values)
   }
   render(){
     return (

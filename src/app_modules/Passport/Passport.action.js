@@ -14,6 +14,22 @@ function login(username,password){
   }
 }
 
+function register(values){
+
+}
+
+export function goRegister(){
+  return dispatch => dispatch(routeActions.push('/register'))
+}
+
+export function goLogin(){
+  return dispatch => dispatch(routeActions.push('/login'))
+}
+
+export function registerAction(values){
+  return dispatch => dispatch(routeActions.push('/login'))
+}
+
 export function loginAction(username,password){
   return dispatch => dispatch(routeActions.push('/dashboard/'))
   /*

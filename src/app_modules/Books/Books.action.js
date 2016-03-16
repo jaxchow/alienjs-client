@@ -1,93 +1,149 @@
 import fetch from 'isomorphic-fetch'
-const URL_DOMAIN=''
+//import { routeActions } from 'react-router-redux'
+import {reduce,initialState} from './Books.reducer'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS'
-export const RECEIVE_POSTS='RECEIVE_POSTS'
-export const FETCH_FAIL='FETCH_FAIL'
-export const RECEIVE_DATA= 'RECEIVE_DATA'
-export const STORE_DATA ='STORE_DATA'
-export const NEW_ITEM ='NEW_ITEM'
-export const EDIT_ITEM ='EDIT_ITEM'
-export const SAVE_ITEM='SAVE_ITEM'
+const URL_DOMAIN='http://192.168.222.63:4000'
 
-export function newItem(text){
+//TODO: 调整命名及常量定义
+export const SAVE_ITEM='BOOK_SAVE_ITEM'
+export const REMOVE_ITEM= 'BOOK_REMOVE_ITEM'
+export const GET_ITEM= 'BOOK_GET_ITEM'
+export const LIST_ITEM = 'BOOK_LIST_ITEM'
+export const SAVE_BATCH= 'BOOK_SAVE_BATCH'
+export const FETCH_REQUEST = 'BOOK_FETCH_REQUEST'
+export const FETCH_SUCCESS = 'BOOK_FETCH_SUCCESS'
+export const FETCH_FAILURE = 'BOOK_FETCH_FAILURE'
+
+
+function getItem(key){
   return {
-    type:'NEW_ITEM',
-    text
+    type: GET_ITEM,
+    key
   }
 }
 
-export function editItem(text){
+function removeItem(key){
   return {
-    type:'EDIT_ITEM',
-    text
+    type: REMOVE_ITEM,
+    key
   }
 }
 
-export function saveItem(text){
+function saveItem(key,item){
   return {
-    type:'SAVE_ITEM',
-    text
+    type: SAVE_ITEM,
+    key,
+    item
   }
 }
 
-function fetchFail(json){
-    return {
-      type:'FETCH_FAIL'
+function saveBatch(items,total){
+  return {
+    type: SAVE_BATCH,
+    items,
+    total
+  }
+}
+
+
+function listItem(idx,offset){
+  return {
+    type: LIST_ITEM,
+    idx,
+    offset
+  }
+}
+
+function fetchFailure(stateCode){
+  return {
+    type:FETCH_FAILURE,
+    stateCode
+  }
+}
+
+function fetchRequest(stateCode){
+  return {
+    TYPE:FETCH_REQUEST,
+    stateCode
+  }
+}
+
+function fetchSuccess(stateCode){
+  return {
+    TYPE:FETCH_SUCCESS,
+    stateCode
+  }
+}
+
+export function listAction(start=1,offset=-1){
+  return (dispatch,getState) =>{
+    let reducer=getState().bookReducer
+    //if(reducer.total<=(start+offset)){
+    if(true){
+      return fetch(`${URL_DOMAIN}/book/`)
+        .then(res => res.json())
+        .then(json => {
+          //TODO : 业务异常未处理
+          dispatch(saveBatch(json.list,json.total))
+        })
+        .then(()=>{
+          dispatch(listItem(start,offset))
+        })
+        .catch(ex => {
+          alert(ex)
+          return dispatch(fetchFailure(ex))
+        })
+    }else{
+      return dispatch(listItem(start,offset))
     }
-}
-
-function requestPosts(subreddit) {
-  return {
-    type: REQUEST_POSTS,
-    subreddit
-  }
-}
-function receivePosts(json){
-  return {
-    type: RECEIVE_POSTS,
-    lists: json.lists,
-    receivedAt: Date.now()
   }
 }
 
-function receiveItem(json){
-  return {
-    type: RECEIVE_DATA,
-    data: json.data
+export function loadAction(key){
+  return (dispatch,getState) =>{
+    let reducer=getState().userReducer
+    if(!reducer.map.has(key)){
+      return fetch(`${URL_DOMAIN}/book/${key}`)
+        .then(res => res.json())
+        .then(json => {
+          //TODO : 业务异常未处理
+          dispatch(saveItem(json.list[0].id,json.list[0]))
+        })
+        .then(()=>{
+          dispatch(getItem(key))
+        })
+        .catch(ex => {
+          return dispatch(fetchFailure(ex))
+        })
+    }else{
+      return dispatch(getItem(key))
+    }
   }
 }
 
-function storeData(json){
-  return {
-    type:STORE_DATA,
-    data: json.data
-  }
-}
 
-export function editAction(text){
-  return dispatch=>{
-     dispatch(editItem(text))
-     dispatch(saveItem(text))
-  }
-}
-
-export function fetchPosts(params){
+export function saveAction(item){
+//  return dispatch => dispatch(saveItem(item))
   return dispatch => {
-    return fetch(`${URL_DOMAIN}/books.json?${params}`)
-      .then(response => response.json())
-      .then(json => dispatch(receivePosts(json)))
-      .then(json => dispatch(storeData(json)))
-      .catch(err=>dispatch(fetchFail(json)))
+    //dispatch(loadItemRequest(key))
+    return fetch(`${URL_DOMAIN}/book/`,{
+        method: 'post',
+        body:JSON.stringify(item)
+      })
+      .then(res => res.json())
+      .then(json => dispatch(loadItemSuccess(json.data.id,json.data)))
+      /*
+      .then(json => {
+        return dispatch(saveItemStore(json.data))
+      })
+      */
+      .catch(ex => {
+        return dispatch(loadItemFailure(ex))
+      })
   }
 }
-
-export function fetchItem(params){
-  return dispatch =>{
-    return fetch(`${URL_DOMAIN}/user.json?${params}`)
-      .then(response => response.json())
-      .then(json => dispatch(receiveItem(json)))
-      .then(json => dispatch(storeData([json])))
-      .catch(err => dispatch(fetchFail(json)))
-  }
+/*
+export function listRoute(){
+  return dispatch => dispatch(routeActions.push('/Users/'))
 }
+*/

@@ -36,37 +36,30 @@ class BooksForm extends Component{
 BooksForm = reduxForm({ // <----- THIS IS THE IMPORTANT PART!
   form: 'BooksForm',                           // a unique name for this form
   fields: FIELDS // all the fields in your form
-},state => ({ // mapStateToProps
-  initialValues: state.userReducer.reduce.data // will pull state into form's initialValues
-}))(BooksForm);
+})(BooksForm);
 
 export default class BooksFormView extends Component{
   componentWillMount(){
-    let {params,data,dispatch}=this.props;
+    let {params,data,actions}=this.props;
     if(params.id){
-      dispatch(fetchItem())
+      actions.loadAction(params.id)
     }else{
 
     }
   }
   handleSubmit(values){
     let {actions}=this.props
-    actions.fetchSave(values)
+  //  actions.fetchSave(values)
   }
   render(){
     let {params,reduce}=this.props;
     return(
         <Panel header="添加书本">
-          <BooksForm onSubmit={this.handleSubmit.bind(this)} />
+          <BooksForm onSubmit={this.handleSubmit.bind(this)} initialValues={reduce.list[0]} />
         </Panel>
     )
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    reduce:state.userReducer.reduce
-  }
-}
 
-export default connect(mapStateToProps)(BooksFormView)
+export default BooksFormView

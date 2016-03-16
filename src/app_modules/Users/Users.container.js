@@ -19,7 +19,7 @@ import * as actions from './Users.action'
 
 const mapStateToProps = (state) => {
   return {
-    reduce:state.userReducer.reduce
+    reduce:state.userReducer
   }
 }
 const mapDispatchToProps = (dispatch) => {

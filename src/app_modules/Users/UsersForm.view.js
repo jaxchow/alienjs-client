@@ -46,30 +46,28 @@ class UserForm extends Component{
 UserForm = reduxForm({ // <----- THIS IS THE IMPORTANT PART!
   form: 'UsersFrom',                           // a unique name for this form
   fields: FIELDS // all the fields in your form
-},state => ({ // mapStateToProps
-  initialValues: state.userReducer.reduce.data // will pull state into form's initialValues
-}))(UserForm);
+})(UserForm);
 
 export default class UsersFormView extends Component{
   componentWillMount(){
     let {params,data,actions}=this.props;
-    if(params.id){
+//    if(params.id){
       actions.loadAction(params.id)
-    }else{
-    }
+//    }
   }
   handleSubmit(values){
     //TODO:保存数据未实现
     let {actions} = this.props
-    actions.saveAction(values)
+  //  actions.saveAction(values)
   //  actions.listRoute()
 
   }
   render(){
+    let {reduce}= this.props;
     return(
-        <Panel header="Users">
-          <UserForm onSubmit={this.handleSubmit.bind(this)} />
-        </Panel>
+      <Panel header="Users">
+        <UserForm onSubmit={this.handleSubmit.bind(this)} initialValues={reduce.list[0]} />
+      </Panel>
     )
   }
 }

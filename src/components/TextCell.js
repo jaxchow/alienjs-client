@@ -21,7 +21,7 @@ export class LinkCell extends Component{
     var {data,rowIndex,col,path} = this.props;
     return (
       <Cell>
-          <a href={"#/Users/edit/"+data[rowIndex][col]}>{data[rowIndex][col]}</a>
+          <a href={path+data[rowIndex][col]}>{data[rowIndex][col]}</a>
       </Cell>
     );
 

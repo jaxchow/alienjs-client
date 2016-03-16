@@ -16,20 +16,16 @@ import {Layout, Flex, Fixed} from 'react-layout-pane'
 export default class Header extends React.Component{
 
   render() {
+    //TODO: 截路径实现有问题存在明显BUG
+    let {location} = this.props
+    let BreadcrumbItems=location.pathname.split("/").map((path)=>(<BreadcrumbItem key={path} href={"#/"+path}>{path}</BreadcrumbItem>))
     return (
       <Fixed className="alienjs-header" {...this.props}>
         <a href="#/login" className="pull-right">logout</a>
         <span className="pull-right username">jaxchow</span>
         <Breadcrumb>
-          <BreadcrumbItem href="#">
-            Home
-          </BreadcrumbItem>
-          <BreadcrumbItem href="">
-            Library
-          </BreadcrumbItem>
-          <BreadcrumbItem active>
-            Data
-          </BreadcrumbItem>
+          <BreadcrumbItem href={"#"}>index</BreadcrumbItem>
+          {BreadcrumbItems}
         </Breadcrumb>
       </Fixed>
     )

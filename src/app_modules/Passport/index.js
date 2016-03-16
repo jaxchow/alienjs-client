@@ -1,22 +1,8 @@
-import React,{Component} from 'react'
-import {Panel,Input,Button,ButtonToolbar} from 'react-bootstrap'
+import React from 'react'
+import PassportRoutes from './Passport.routes'
 
-export default class LoginApp extends Component{
-  handleSubmit(){
+var  RouteUtils = require('react-router/lib/RouteUtils')
 
-  }
-  render(){
-    return (
-      <Panel header="登陆">
-        <form onSubmit={this.handleSubmit}>
-          <Input type="text" label="username" placeholder="Enter text"  />
-          <Input type="password" label="password" placeholder="Enter text" />
-          <ButtonToolbar>
-            <Button bsStyle="primary" type="submit">login</Button>
-            <Button bsStyle="success" type="submit">singin</Button>
-          </ButtonToolbar>
-        </form>
-      </Panel>
-    )
-  }
-}
+const routes = RouteUtils.createRoutesFromReactChildren(PassportRoutes)
+
+export default routes

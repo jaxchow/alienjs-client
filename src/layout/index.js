@@ -24,7 +24,7 @@ export default class AppLayout extends React.Component{
   render() {
     return (
       <Layout type="column">
-        <Header style={styles.header}/>
+        <Header style={styles.header} location={this.props.location}/>
         <Flex>
             <Layout type="row">
                 <Sidebar style={styles.sidebar}/>

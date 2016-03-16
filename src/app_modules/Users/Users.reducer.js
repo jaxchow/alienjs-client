@@ -12,82 +12,65 @@ import { createStore, combineReducers } from 'redux';
 
 import {
   SAVE_ITEM,
+  SAVE_BATCH,
   REMOVE_ITEM,
   GET_ITEM,
-  LOAD_ITEM_REQUEST,
-  LOAD_ITEM_SUCCESS,
-  SAVE_ITEM_STORES,
+  FETCH_REQUEST,
+  FETCH_SUCCESS,
+  FETCH_FAILURE,
   LIST_ITEM,
-  LIST_ITEM_SUCCESS
 } from './Users.action'
 
 // TODO: 调整本地数据结构
-var initialState={
-  stores: {},
+const initialState={
+  map: new Map(),
   total:0,
-  list:[],
-  params:{},
-  isFetching:false,
-  updateAt:""
+  stateCode:0,
+  list:new Array(),
+  params:{}
 }
 //TODO： 拆分reduce。update\get
 function reduce(state = initialState, action) {
+  let {map}=state
   switch (action.type) {
     case LIST_ITEM:
       return Object.assign({},state,{
-        list:state.list.slice(action.start, action.offset)
+        list:[...map].slice(action.idx-1, action.offset).map((it)=>it[1])
       })
-      //TODO: key 无法获取时存在BUG,返回undefined
     case GET_ITEM:
-      let item=state.list.filter((it)=>{
-        return it.id==action.key
-      })
-      let stores=Object.create(null);
-      stores[action.key]=state.stores[item[0]]
       return Object.assign({},state, {
-        stores:stores,
-        list:item
+        list:[map.get(action.key)]
     })
     case REMOVE_ITEM:
+      let item=map.get(action.key)
+      map.delete(action.key)
       return Object.assign(state, {
-        list:state.list.filter((id)=> id!=action.key)
+  //      list:[item]
       })
+  //  case EDIT_ITEM:
     case SAVE_ITEM:
+      map.set(action.key,action.item)
       return Object.assign(state, {
-        list:state.list.concat([action.key])
+      //  list:[item]
       })
-    case SAVE_ITEM_STORES:
-      //override store data
-      state.stores[action.key]=action.item
+    case SAVE_BATCH:
+      action.items.map((it)=>{
+        map.set(it.id,it)
+      })
+      return Object.assign(state, {
+        total:action.total
+      })
+    case FETCH_FAILURE:
+    case FETCH_SUCCESS:
+    case FETCH_REQUEST:
       return Object.assign(state,{
-        stores: state.stores,
-        list: state.list.concat([action.key])
-      })
-    case LOAD_ITEM_REQUEST:
-      return Object.assign({}, state, {
-        isFetching:true
-      })
-    case LOAD_ITEM_SUCCESS:
-      state.stores[action.key]=action.item
-      return Object.assign({}, state, {
-        isFetching:false,
-        stores: state.stores,
-        list: [action.key]
-      })
-    case LIST_ITEM_SUCCESS:
-      state.stores[action.key]=action.item
-      return Object.assign({}, state, {
-        isFetching:false,
-        //TODO: store 未处理新数据
-        stores: state.stores,
-        list: action.list
+        code:action.code
       })
     default:
       return state;
   }
 }
 
-
-const userReducer = combineReducers({reduce});
-export {reduce};
-export default userReducer;
+//const userReducer = combineReducers({reduce});
+export {reduce,initialState};
+export default reduce;

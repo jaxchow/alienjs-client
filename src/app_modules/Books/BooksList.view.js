@@ -9,7 +9,7 @@ import TextCell,{LinkCell} from '../../components/TextCell'
 class BooksListView extends PageViewComponent{
   componentWillMount(){
     let {actions}=this.props;
-    actions.fetchPosts()
+    actions.listAction()
   }
   rowGetter(rowIndex){
     let {reduce}=this.props;
@@ -36,20 +36,20 @@ class BooksListView extends PageViewComponent{
   }
   renderTableList(){
     let {reduce}=this.props;
-    let sortedDataList = reduce.lists || []
+    let sortedDataList = reduce.list || []
     return (
       <Table
        rowHeight={40}
        rowsCount={sortedDataList.length}
        headerHeight={40}
        width={1000}
-       height={160}
+       height={560}
        {...this.props}>
      <Column
        columnKey="id"
        fixed={true}
        header={<Cell>编号</Cell>}
-       cell={<LinkCell data={sortedDataList} col="id" />}
+       cell={<TextCell data={sortedDataList} col="id" />}
        width={50}
      />
      <Column
@@ -77,6 +77,12 @@ class BooksListView extends PageViewComponent{
        header={<Cell> ISBN </Cell>}
        fixed={true}
        cell={<TextCell data={sortedDataList} col="isbn"/>}
+       width={200}
+     />
+     <Column columnKey="isbn"
+       header={<Cell> 操作 </Cell>}
+       fixed={true}
+       cell={<LinkCell data={sortedDataList} path="#/books/edit/" col="id"/>}
        width={200}
      />
      </Table>

@@ -11,6 +11,7 @@
 
 import React,{Component} from 'react'
 import ReactDOM from 'react-dom'
+import {renderToString} from 'react-dom/server'
 import {Router,hashHistory} from 'react-router'
 import AppRouter from './router'
 import {Provider} from 'react-redux'
@@ -19,3 +20,4 @@ import store from './store'
 import createContainer from './utils/CreateContainer'
 
 ReactDOM.render(<Provider store={store}><Router routes={AppRouter()} history={hashHistory} /></Provider>,createContainer())
+//ReactDOM.render(<Provider store={store}><Router routes={AppRouter()} /></Provider>,createContainer())

@@ -34,5 +34,3 @@ let LoginViewContainer= connect(mapStateToProps,mapDispatchToProps)(LoginView)
 let RegisterViewContainer= connect(mapStateToProps,mapDispatchToProps)(RegisterView)
 
 export {LoginViewContainer,RegisterViewContainer}
-
-export default UsersListContainer;
