@@ -1,6 +1,5 @@
 import React,{Component,PropTypes} from 'react'
 import {reduxForm} from 'redux-form'
-import {connect,Provider } from 'react-redux'
 import ReactBootstrap,{Panel,Input,ButtonInput} from 'react-bootstrap'
 
 import * as Actions from './Books.action'
@@ -24,8 +23,8 @@ class BooksForm extends Component{
         <Input type="text" label="isbn" placeholder="Enter text" {...fields.isbn} />
         <Input type="text" label="language" placeholder="Enter text" {...fields.language} />
         <Input type="text" label="year" placeholder="Enter text" {...fields.year} />
-        <Input type="text" label="page" placeholder="Enter email" {...fields.page} />
-        <Input type="text" label="format" placeholder="Enter email" {...fields.format} />
+        <Input type="text" label="page" placeholder="Enter text" {...fields.page} />
+        <Input type="text" label="format" placeholder="Enter text" {...fields.format} />
         <ButtonInput type="reset" value="Reset Button" />
         <ButtonInput bsStyle="primary" type="submit" value="Submit Button"  disable={submitting}/>
       </form>

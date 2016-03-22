@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 //import { routeActions } from 'react-router-redux'
 import {reduce,initialState} from './Books.reducer'
 
+
 const URL_DOMAIN='http://192.168.222.63:4000'
 
 //TODO: 调整命名及常量定义
@@ -121,6 +122,9 @@ export function loadAction(key){
   }
 }
 
+export function newAction(){
+
+}
 
 export function saveAction(item){
 //  return dispatch => dispatch(saveItem(item))

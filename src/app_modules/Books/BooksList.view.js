@@ -7,10 +7,12 @@ import SortHeaderCell from '../../components/SortTableCell'
 import TextCell,{LinkCell} from '../../components/TextCell'
 
 class BooksListView extends PageViewComponent{
+  /*
   componentWillMount(){
     let {actions}=this.props;
     actions.listAction()
   }
+  */
   rowGetter(rowIndex){
     let {reduce}=this.props;
     return reduce.lists[rowIndex]
@@ -18,17 +20,23 @@ class BooksListView extends PageViewComponent{
   rowItemClick(event,rowIndex,data){
     console.log(data)
   }
+  filterTableHandler(){
+    console.log("ss")
+  }
   renderToolbar(){
+    let {actions}=this.props;
     return (
       <ButtonGroup>
-         <Button bsStyle="primary" href="#/books/add">添加书本</Button>
+         <Button bsStyle="primary" onClick={actions.newAction}>添加书本</Button>
       </ButtonGroup>
     )
   }
   renderSearchBar(){
+    let {reduce}=this.props
+    let params=reduce.params ||{}
     return (
       <Navbar.Form pullRight>
-        <Input type="text" placeholder="Search"/>
+        <Input type="text" placeholder="Search" value={params.key} name="key" onChange={this.filterTableHandler}/>
         {' '}
         <Button type="submit">搜索</Button>
       </Navbar.Form>
@@ -89,7 +97,7 @@ class BooksListView extends PageViewComponent{
     )
   }
   render(){
-    return (
+      return (
       <Panel header="书本管理">
           {this.renderToolbar()}
           {this.renderSearchBar()}
