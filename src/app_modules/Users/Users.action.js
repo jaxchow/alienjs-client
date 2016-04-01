@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import {routeActions} from 'react-router-redux'
+//import {routeActions} from 'react-router-redux'
 import {reduce,initialState} from './Users.reducer'
 
 const URL_DOMAIN='http://192.168.222.63:4000'
@@ -77,8 +77,9 @@ function fetchSuccess(stateCode){
 
 export function listAction(start=1,offset=-1){
   return (dispatch,getState) =>{
-    let reducer=getState().userReducer
-    if(reducer.total<=(start+offset)){
+    let reducer=getState().usersReducer
+    //if(reducer.total<=(start+offset)){
+    if(true){
       return fetch(`${URL_DOMAIN}/user/`)
         .then(res => res.json())
         .then(json => {
@@ -140,7 +141,8 @@ export function saveAction(item){
       })
   }
 }
-
+/*
 export function listRoute(){
   return dispatch => dispatch(routeActions.push('/Users/'))
 }
+*/

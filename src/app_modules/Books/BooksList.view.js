@@ -7,12 +7,10 @@ import SortHeaderCell from '../../components/SortTableCell'
 import TextCell,{LinkCell} from '../../components/TextCell'
 
 class BooksListView extends PageViewComponent{
-  /*
   componentWillMount(){
     let {actions}=this.props;
     actions.listAction()
   }
-  */
   rowGetter(rowIndex){
     let {reduce}=this.props;
     return reduce.lists[rowIndex]
@@ -104,6 +102,16 @@ class BooksListView extends PageViewComponent{
           {this.renderTableList()}
       </Panel>
     )
+  }
+}
+
+BooksListView.propTypes={
+  reduce:PropTypes.object
+}
+
+BooksListView.defaultProps={
+  reduce:{
+    list:[]
   }
 }
 

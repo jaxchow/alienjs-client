@@ -5,35 +5,30 @@ var HtmlPlugin = require('webpack-html-plugin');
 var webpackConfig = {
   entry: {
     app: [
-      'webpack-dev-server/client?http://0.0.0.0:8080',//资源服务器地址
       './src/app.js'
-    ],
-    Users:[
-      './src/app_modules/Users/Users.container.js'
-    ],
-    Books:[
-      './src/app_modules/Books/Books.container.js'
     ]
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
-    publicPath: "/asserts",
+    path: path.resolve(__dirname, "client"),
+    //publicPath: ".",
     filename: "[name].bundle.js"
   },
   plugins: [
     //new webpack.optimize.CommonsChunkPlugin('react', 'react.js'),
     new HtmlPlugin({
         filename: 'app.html',
-        hash: true,
+        hash: false,
         title: 'App',
         chunks: ['app']
     }),
+    /*
     new HtmlPlugin({
         filename: 'Books.html',
         hash: true,
         title: 'Books',
         chunks: ['react','Books']
     }),
+    */
 
     /*
     new webpack.optimize.CommonsChunkPlugin({
@@ -44,13 +39,9 @@ var webpackConfig = {
     })
     */
   ],
-  devtool: 'source-map',
+  //devtool: 'source-map',
   module: {
     loaders: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'react-hot'
-    },{
       test: /\.js$/,
       exclude: /node_modules/,
       loader: 'babel-loader',

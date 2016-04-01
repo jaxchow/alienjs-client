@@ -12,8 +12,11 @@ import StyleSheet from 'react-style'
 
 let Styles=StyleSheet.create({
     header:{
-      height: '4rem',
       color: '#fff',
+    },
+    row:{
+      marginLeft:0,
+      marginRight:0
     },
     sidebar:{
       padding: '1rem',
@@ -26,4 +29,11 @@ let Styles=StyleSheet.create({
     }
 })
 
+let headerStyle=StyleSheet.create({
+  breadcrumb:{
+    marginBottom:0
+  }
+})
+
+export {headerStyle}
 export default Styles

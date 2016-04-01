@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch'
-//import { routeActions } from 'react-router-redux'
+
+import ActionsRouter from '../../utils/ActionRouterUtils'
 import {reduce,initialState} from './Books.reducer'
 
 
@@ -122,10 +123,6 @@ export function loadAction(key){
   }
 }
 
-export function newAction(){
-
-}
-
 export function saveAction(item){
 //  return dispatch => dispatch(saveItem(item))
   return dispatch => {
@@ -146,8 +143,6 @@ export function saveAction(item){
       })
   }
 }
-/*
 export function listRoute(){
-  return dispatch => dispatch(routeActions.push('/Users/'))
+  return dispatch => dispatch(ActionsRouter.push('/Users/'))
 }
-*/

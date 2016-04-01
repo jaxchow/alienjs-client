@@ -1,56 +1,33 @@
-import chai,{expect} from 'chai'
-//import expect from 'expect'
+import {expect} from 'chai'
+import fetch from 'isomorphic-fetch'
+import {createStore,compose, applyMiddleware,combineReducers} from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
+
 import mockStore from '../../../utils/MockStore'
-import * as actions from '../Books.action'
+import {reduce} from '../Books.reducer'
+import {saveAction,listAction,loadAction} from '../Books.action'
 
-describe('booksAction actions test',() =>{
-  it('should create an action to newItem',() =>{
-     const text='add'
-     const expectedAction ={
-       type:'NEW_ITEM',
-       text:text
-     }
-     expect(actions.newItem(text)).to.eql(expectedAction)
-  })
+const URL_DOMAIN='http://localhost:8080/'
 
-  it("should edit and action to editItem",()=>{
-    const text='edit'
-    const expectedAction ={
-      type:'EDIT_ITEM',
-      text
-    }
-    expect(actions.editItem(text)).to.eql(expectedAction)
-  })
+const reducers = combineReducers(Object.assign({},{bookReducer:reduce}));
+const loggerMiddleware = createLogger()
+const createStoreWithMiddleware = applyMiddleware(
+  thunkMiddleware, // 允许我们 dispatch() 函数
+  loggerMiddleware, // 一个很便捷的 middleware，用来打印 action 日志
+)(createStore)
 
+const store = createStoreWithMiddleware(reducers)
 
-  it("should save and action to saveItem",()=>{
-    const text='save'
-    const expectedAction ={
-      type:'SAVE_ITEM',
-      text
-    }
-    expect(actions.saveItem(text)).to.eql(expectedAction)
-  })
-
-  it("should editAction with dispatch is edit dispatchAction",(done)=>{
-    const text="aaa"
+describe('books actions test', () => {
+  it('should be loadAction by key {1} method',(done)=>{
     const expectedActions = [
-      { type: 'EDITITEM',text},
-      { type: 'SAVEITEM',text}
+      { type :'SAVE_ITEM',"key":'1',
+        item:{id: '1', bookname: 'jaxchow', author: 'jaxchow@gmail.com'}
+      },
+      { type: 'GET_ITEM', "key":1}
     ]
-    const store = mockStore(text, expectedActions, done)
-    store.dispatch(actions.editAction(text))
-    //expect(actions.editAction(text)).to.eql(expectedAction)
+    const mkStore = mockStore(store.getState(), expectedActions,done)
+    mkStore.dispatch(loadAction(1))
   })
-
-  it("should fetchItem with dispatch ",(done)=>{
-    const text="aaa"
-    const expectedActions = [
-      { type: 'RECEIVE_DATA',text},
-      { type: 'STORE_DATA',text}
-    ]
-    const store = mockStore(text, expectedActions, done)
-    store.dispatch(actions.fetchItem(text))
-  })
-
-});
+})

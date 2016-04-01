@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var path= require('path');
 var HtmlPlugin = require('webpack-html-plugin');
+//var HasteResolverPlugin = require('haste-resolver-webpack-plugin');
 
 var webpackConfig = {
   entry: {
@@ -16,7 +17,7 @@ var webpackConfig = {
     ]
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist/"),
     publicPath: path.resolve(__dirname,"/asserts"),
     filename: "[name].bundle.js"
   },
@@ -36,6 +37,11 @@ var webpackConfig = {
   },
   plugins: [
     //new webpack.optimize.CommonsChunkPlugin('react', 'react.js'),
+    new webpack.DefinePlugin({
+      Platform: {
+        OS:'desktop'
+      }
+    }),
     new HtmlPlugin({
         filename: 'app.html',
         hash: true,
@@ -48,15 +54,6 @@ var webpackConfig = {
         title: 'Books',
         chunks: ['react','Books']
     }),
-
-    /*
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "react",
-      filename: "react.js",
-      async: true,
-      chunks: ["app", "Users","Books"],
-    })
-    */
   ],
   devtool: 'source-map',
   module: {

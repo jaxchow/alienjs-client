@@ -85,7 +85,6 @@ class UsersListView extends Component{
     return (
       <ButtonGroup>
          <Button bsStyle="primary" href="#/users/add">添加用户</Button>
-         <Button bsStyle="default" href="#/users/add">添加人员</Button>
       </ButtonGroup>
     )
   }

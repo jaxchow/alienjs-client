@@ -4,14 +4,22 @@
   "description": "admin manager for alienjs",
   "main": "src/app.js",
   "scripts": {
+    "electron": "electron src/client.js",
     "test": "mocha --compilers js:babel-core/register --recursive --growl",
     "test:all": "mocha --compilers js:babel-core/register --recursive **/spec/*.spec.js",
     "test:watch": "npm run test:all -- --watch",
     "test:books": "npm test -- src/app_modules/Books/**/spec/*.spec.js",
     "test:users": "npm test -- src/app_modules/Users/**/spec/*.spec.js",
+    "test:passport": "npm test -- src/app_modules/Passport/**/spec/*.spec.js",
     "dev": "webpack-dev-server --config webpack.config.dev.js --devtool eval --progress --colors --watch --hot --inline --open",
-    "start": "webpack-dev-server --config webpack.config.js --devtool eval"
+    "start": "webpack-dev-server --config webpack.config.js --devtool eval",
+    "releases":"electron-packager client alien-client --platform=win32 --arch=x64  --out=releases --asar=true --overwrite --all"
   },
+  "build": {
+    "app-bundle-id": "your.id",
+    "app-category-type": "your.app.category.type",
+    "iconUrl": "(windows only) A URL to an ICO file to use as the application icon, see details below"
+  }
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/jaxchow/alienjs-client.git"
@@ -36,6 +44,8 @@
     "babel-register": "^6.5.2",
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
+    "electron-packager": "^5.2.1",
+    "electron-prebuilt": "^0.37.2",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.8.1",
     "jsdom": "^8.0.4",

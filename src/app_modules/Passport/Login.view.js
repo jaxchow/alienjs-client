@@ -24,7 +24,6 @@ class LoginForm extends Component{
   };
 
   render(){
-    console.log(this.props.actions)
     const {fields:{username,password},handleSubmit,submitting,actions} = this.props
     return(
       <form onSubmit={handleSubmit}>
@@ -48,7 +47,8 @@ LoginForm = reduxForm({ // <----- THIS IS THE IMPORTANT PART!
 class LoginView extends Component{
   handleSubmit(values){
     let {actions} = this.props
-    actions.loginAction(values)
+    //actions.loginAction(values)
+    actions.doLogin("test","test")
   }
   render(){
     return (

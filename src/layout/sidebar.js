@@ -26,17 +26,6 @@ export default class Sidebar extends React.Component{
       <Fixed className="sidebar" {...this.props}>
           <Layout type="column">
               <Fixed className="top-left">
-               {/*
-              <Thumbnail src="https://react-bootstrap.github.io/assets/thumbnaildiv.png" alt="242x200">
-                 <h3>jaxchow</h3>
-                 <p>管理员</p>
-               </Thumbnail>
-                <ListGroup>
-                  <ListGroupItem href="#/users" active>用户管理</ListGroupItem>
-                  <ListGroupItem href="#/books">书本管理</ListGroupItem>
-                  <ListGroupItem href="#" disabled>Link 3</ListGroupItem>
-                </ListGroup>
-                */}
                   <SideNav className="sidenav" itemType="righticon" itemHeight="32px" navigation={nav} >
                   </SideNav>
               </Fixed>

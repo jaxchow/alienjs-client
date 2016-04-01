@@ -1,54 +1,75 @@
-import chai,{expect} from 'chai'
-import {reduce} from '../Books.reducer.js'
+import {expect} from 'chai'
+
+import {SAVE_ITEM,REMOVE_ITEM,GET_ITEM,SAVE_ITEM_STORES} from '../Books.action'
+import bookReducer,{reduce,initialState} from '../Books.reducer'
 
 describe('books reducer test', () => {
-  it('should return the initial state', () => {
-    var expectedReduce={}
-    expect(reduce(undefined, {})).to.eql(expectedReduce)
+  it('should be undefined',()=>{
+    expect(reduce(initialState,{type:undefined}))
+    .to.eql(initialState)
   })
 
-  it('should return the RECEIVE_DATA state',() =>{
-    var expectedReduce={
-      data:[{
-        id:1,
-        username:'javascript'
-      },{
-        id:2,
-        username:'html'
-      },{
-        id:3,
-        username:'css'
-      }],
-      lastUpdated:""
+  it('should be SAVE_ITEM key {1}',()=>{
+    let key=1
+    let item={
+      id:key,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
     }
-    expect(reduce({}, {
-      type:'RECEIVE_DATA',
-      data:[{
-        id:1,
-        username:'javascript'
-      },{
-        id:2,
-        username:'html'
-      },{
-        id:3,
-        username:'css'
-      }],
-      receivedAt:""
-    })).to.eql(expectedReduce)
+
+    let expectedReduce=Object.assign(initialState,{
+        map:new Map().set(key,item)
+    })
+    let reducer=reduce(initialState,{type:'SAVE_ITEM',key,item})
+    expect(reducer.map.get(key))
+    .to.eql(item)
   })
-  /*
-  it('should return the RECEIVE_POSTS state',() =>{
-    var expectedReduce={
-      lists:{
-        aa:1,
-      },
-      lastUpdated:""
+
+  it('should be GET_ITEM key {1}',()=>{
+    let item={
+      id:1,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
     }
-    expect(reduce({}, {
-      type:'RECEIVE_POSTS',
-      lists:{aa:1},
-      receivedAt:""
-    })).to.eql(expectedReduce)
+    expect(reduce(initialState,{type:'GET_ITEM',key:1}).list)
+    .to.eql([item])
   })
-  */
+
+  it('should be REMOVE_ITEM KEY {1}',()=>{
+    let item={
+      id:1,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
+    }
+    let reducer=reduce(initialState,{type:'REMOVE_ITEM',key:1})
+    expect(reducer.map.has(1))
+    .to.eql(false)
+  })
+
+  it('should be LIST_ITEM',()=>{
+    let item={
+      id:1,
+      username:'jaxchow',
+      email:'jaxchow@gmail.com'
+    }
+    initialState.map.set(1,item)
+    initialState.map.set(2,item)
+    initialState.map.set(3,item)
+    initialState.map.set(4,item)
+    initialState.map.set(5,item)
+    initialState.map.set(6,item)
+    initialState.map.set(7,item)
+
+    let reducer=reduce(initialState,{type:'LIST_ITEM'})
+    expect(reducer.list.length)
+    .to.eql(initialState.map.size)
+  })
+
+  it('should be LIST_ITEM start {1} offset {5} ',()=>{
+      let idx=1
+      let offset=5
+      let reducer=reduce(initialState,{type:'LIST_ITEM',idx:idx,offset:offset})
+      expect(reducer.list.length)
+      .to.eql(offset)
+  })
 })

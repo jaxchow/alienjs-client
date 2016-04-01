@@ -3,7 +3,7 @@ import createLogger from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
 import { connect,Provider } from 'react-redux'
 
-import reducer from './Users.reducer'
+//import reducer from './Users.reducer'
 
 const loggerMiddleware = createLogger()
 const createStoreWithMiddleware = applyMiddleware(
@@ -11,6 +11,6 @@ const createStoreWithMiddleware = applyMiddleware(
   loggerMiddleware // 一个很便捷的 middleware，用来打印 action 日志
 )(createStore)
 
-const store = createStoreWithMiddleware(reducer)
+//const store = createStoreWithMiddleware(reducer)
 
 export default createStoreWithMiddleware
